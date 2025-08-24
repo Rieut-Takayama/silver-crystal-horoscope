@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幻の銀水晶 - マジカルモックアップ</title>
+    <title>幻の銀水晶 - 星読みAI × マジカルノート術</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&display=swap');
         
@@ -19,6 +19,7 @@
             color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
+            padding: 10px;
         }
         
         /* キラキラ星のアニメーション */
@@ -386,6 +387,112 @@
         .nav-dot:hover {
             transform: scale(1.3);
             background: #ff9472;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+            
+            .screen {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
+                padding: 20px;
+                min-height: 100vh;
+                box-shadow: none;
+            }
+            
+            .magical-title {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 12px;
+            }
+            
+            .moon-phase {
+                font-size: 36px;
+            }
+            
+            .message-box {
+                padding: 15px;
+                font-size: 14px;
+            }
+            
+            .card {
+                padding: 15px;
+                margin: 10px 0;
+            }
+            
+            .card-icon {
+                font-size: 36px;
+            }
+            
+            .card h3 {
+                font-size: 16px;
+            }
+            
+            .card p {
+                font-size: 12px !important;
+            }
+            
+            .magical-button {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            
+            .form-group label {
+                font-size: 13px;
+            }
+            
+            .magical-input,
+            .magical-textarea {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+            
+            .magical-textarea {
+                min-height: 120px;
+            }
+            
+            .symbol {
+                font-size: 32px;
+            }
+            
+            .symbol-grid {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .calendar-day {
+                font-size: 12px;
+            }
+            
+            .nav-dots {
+                margin: 20px 0;
+                padding-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .magical-title {
+                font-size: 24px;
+            }
+            
+            .message-box p {
+                font-size: 14px !important;
+            }
+            
+            .magical-button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .form-group {
+                margin: 15px 0;
+            }
         }
     </style>
 </head>
