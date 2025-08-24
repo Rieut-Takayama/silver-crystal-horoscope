@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幻の銀水晶 - Gemini API設定ガイド</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&display=swap');
+        
+        body {
+            font-family: 'Kiwi Maru', serif;
+            background: linear-gradient(to bottom, #1a0033, #330066, #660099);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            border: 2px solid rgba(255, 192, 203, 0.3);
+            box-shadow: 0 0 30px rgba(255, 192, 203, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            background: linear-gradient(45deg, #ff6ec7, #ffd700, #ff6ec7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #ffd700;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .step {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 192, 203, 0.3);
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6ec7, #ff9472);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        a {
+            color: #ff6ec7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            color: #ffd700;
+            text-decoration: underline;
+        }
+        
+        .warning {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #ff6ec7, #ff9472);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+            box-shadow: 0 5px 15px rgba(255, 110, 199, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 110, 199, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ 幻の銀水晶 - Gemini API設定ガイド ✨</h1>
+        
+        <p style="text-align: center; color: #ffb6c1;">
+            Google Gemini APIを使って、AI星読み機能を無料で使えるようにしましょう！
+        </p>
+        
+        <h2>🌙 Gemini APIとは？</h2>
+        <p>
+            Googleが提供する最新のAI APIです。<strong>無料枠</strong>があり、個人利用には十分な量が使えます。
+        </p>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Google AI Studioにアクセス</strong>
+            <p>以下のリンクからGoogle AI Studioにアクセスしてください：</p>
+            <p><a href="https://makersuite.google.com/" target="_blank">https://makersuite.google.com/</a></p>
+            <p>※ Googleアカウントでログインが必要です</p>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>APIキーを取得</strong>
+            <p>1. 「Get API key」ボタンをクリック</p>
+            <p>2. 「Create API key」を選択</p>
+            <p>3. プロジェクトを選択（新規作成でもOK）</p>
+            <p>4. 生成されたAPIキーをコピー</p>
+        </div>
+        
+        <div class="warning">
+            ⚠️ <strong>重要：</strong> APIキーは他人に教えないでください。GitHubにアップロードしないよう注意！
+        </div>
+        
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>app.htmlにAPIキーを設定</strong>
+            <p>1. <code>app.html</code>ファイルをテキストエディタで開く</p>
+            <p>2. 以下の行を見つける：</p>
+            <div class="code-block">
+const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY'; // ここにAPIキーを入れる
+            </div>
+            <p>3. <code>'YOUR_GEMINI_API_KEY'</code>の部分を、取得したAPIキーに置き換える：</p>
+            <div class="code-block">
+const GEMINI_API_KEY = 'AIzaSy...あなたのAPIキー...'; // 実際のキーに置き換え
+            </div>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>ファイルを保存して使用開始</strong>
+            <p>1. ファイルを保存</p>
+            <p>2. ブラウザで<code>app.html</code>を開く</p>
+            <p>3. AI機能が使えるようになります！</p>
+        </div>
+        
+        <h2>🌟 使える機能</h2>
+        <ul>
+            <li>📊 <strong>AI星読み分析</strong> - あなたの星座に基づいた詳細な運勢</li>
+            <li>💭 <strong>マジカルノートのAI問いかけ</strong> - 月相に応じた深い質問</li>
+            <li>✨ <strong>今日のメッセージ生成</strong> - 毎日違うパーソナルメッセージ</li>
+        </ul>
+        
+        <h2>💰 無料枠について</h2>
+        <p>Gemini APIの無料枠：</p>
+        <ul>
+            <li>1分間に60リクエストまで</li>
+            <li>1日に1,500リクエストまで</li>
+            <li>個人利用には十分な量です！</li>
+        </ul>
+        
+        <div class="success">
+            ✅ 設定が完了したら、<code>app.html</code>を開いて幻の銀水晶の魔法を体験してください！
+        </div>
+        
+        <h2>🔧 トラブルシューティング</h2>
+        <ul>
+            <li><strong>APIキーエラーが出る場合</strong>：キーが正しくコピーされているか確認</li>
+            <li><strong>CORS エラーが出る場合</strong>：ローカルサーバーで実行するか、GitHub Pagesにアップロード</li>
+            <li><strong>レート制限エラー</strong>：1分待ってから再試行</li>
+        </ul>
+        
+        <button onclick="window.location.href='app.html'">
+            🌙 幻の銀水晶を起動する
+        </button>
+    </div>
+</body>
+</html>
