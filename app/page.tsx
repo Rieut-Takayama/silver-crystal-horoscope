@@ -1,103 +1,125 @@
-import Image from "next/image";
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Moon, Star, Sparkles, Calendar, BookOpen } from 'lucide-react'
+import { getMoonPhase } from '@/utils/astrology'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import StarryBackground from '@/components/StarryBackground'
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const router = useRouter()
+  const [moonPhase, setMoonPhase] = useState('')
+  const [greeting, setGreeting] = useState('')
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  useEffect(() => {
+    const currentDate = new Date()
+    setMoonPhase(getMoonPhase(currentDate))
+    const hour = currentDate.getHours()
+    if (hour < 5) setGreeting('月光が導く時間')
+    else if (hour < 12) setGreeting('朝の光とともに')
+    else if (hour < 18) setGreeting('太陽が輝く時間')
+    else setGreeting('星々が見守る夜')
+  }, [])
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-indigo-950 via-purple-900 to-pink-900">
+      {/* 星空の背景 */}
+      <StarryBackground />
+
+      <div className="relative z-10">
+        {/* ヘッダー */}
+        <header className="p-6 text-center">
+          <h1 className="text-4xl md:text-6xl font-serif text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 mb-2">
+            幻の銀水晶
+          </h1>
+          <p className="text-pink-200 text-sm md:text-base">星読みAI × マジカルノート術</p>
+        </header>
+
+        {/* メインコンテンツ */}
+        <main className="container mx-auto px-4 py-8 max-w-4xl">
+          {/* 挨拶とムーンフェーズ */}
+          <div className="text-center mb-12 p-8 bg-white/10 backdrop-blur-md rounded-3xl shadow-xl">
+            <h2 className="text-2xl md:text-3xl text-pink-100 mb-4">{greeting}</h2>
+            <div className="flex items-center justify-center gap-4 text-purple-200">
+              <Moon className="w-8 h-8" />
+              <span className="text-lg">今夜は{moonPhase}</span>
+            </div>
+          </div>
+
+          {/* 機能カード */}
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {/* 星の流れ分析 */}
+            <Link href="/horoscope" className="group p-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md rounded-2xl border border-purple-300/30 hover:border-purple-300/60 transition-all duration-300 hover:scale-105 block">
+              <div className="flex items-center gap-3 mb-4">
+                <Star className="w-8 h-8 text-yellow-300" />
+                <h3 className="text-xl font-semibold text-purple-100">星の流れを読む</h3>
+              </div>
+              <p className="text-purple-200 text-sm text-left">
+                あなたの生まれた瞬間の星空から、これからの節目と可能性を読み解きます
+              </p>
+            </Link>
+
+            {/* マジカルノート */}
+            <Link href="/note" className="group p-6 bg-gradient-to-br from-pink-500/20 to-purple-500/20 backdrop-blur-md rounded-2xl border border-pink-300/30 hover:border-pink-300/60 transition-all duration-300 hover:scale-105 block">
+              <div className="flex items-center gap-3 mb-4">
+                <BookOpen className="w-8 h-8 text-pink-300" />
+                <h3 className="text-xl font-semibold text-pink-100">願いを紡ぐ</h3>
+              </div>
+              <p className="text-pink-200 text-sm text-left">
+                星のエネルギーに合わせて、願いを現実に変える魔法のノートを綴ります
+              </p>
+            </Link>
+
+            {/* カレンダー */}
+            <Link href="/calendar" className="group p-6 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur-md rounded-2xl border border-indigo-300/30 hover:border-indigo-300/60 transition-all duration-300 hover:scale-105 block">
+              <div className="flex items-center gap-3 mb-4">
+                <Calendar className="w-8 h-8 text-indigo-300" />
+                <h3 className="text-xl font-semibold text-indigo-100">月のリズム</h3>
+              </div>
+              <p className="text-indigo-200 text-sm text-left">
+                新月、満月、惑星の動き。最適なタイミングで願いを叶えるカレンダー
+              </p>
+            </Link>
+
+            {/* 直感メッセージ */}
+            <Link href="/message" className="group p-6 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 backdrop-blur-md rounded-2xl border border-purple-300/30 hover:border-purple-300/60 transition-all duration-300 hover:scale-105 block">
+              <div className="flex items-center gap-3 mb-4">
+                <Sparkles className="w-8 h-8 text-purple-300" />
+                <h3 className="text-xl font-semibold text-purple-100">今日のメッセージ</h3>
+              </div>
+              <p className="text-purple-200 text-sm text-left">
+                宇宙からの導きを受け取り、今この瞬間に必要な気づきを得ます
+              </p>
+            </Link>
+          </div>
+
+          {/* 始めるボタン */}
+          <div className="text-center">
+            <button 
+              onClick={() => {
+                const profile = localStorage.getItem('userProfile')
+                if (!profile) {
+                  router.push('/profile')
+                } else {
+                  router.push('/horoscope')
+                }
+              }}
+              className="px-8 py-4 bg-gradient-to-r from-pink-400 to-purple-400 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            >
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                星読みの旅を始める
+              </span>
+            </button>
+          </div>
+        </main>
+
+        {/* フッター */}
+        <footer className="text-center py-8 text-purple-300 text-sm">
+          <p>月の光が、あなたの願いを照らしますように</p>
+        </footer>
+      </div>
     </div>
-  );
+  )
 }
