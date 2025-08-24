@@ -568,6 +568,48 @@
             font-size: 14px;
             text-align: center;
         }
+        
+        /* モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            position: relative;
+            background: linear-gradient(to bottom, #2a0055, #440088);
+            margin: 10% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 192, 203, 0.5);
+            box-shadow: 0 0 50px rgba(255, 192, 203, 0.5);
+            animation: sparkle 3s infinite;
+        }
+        
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffb6c1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: #ff6ec7;
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
@@ -689,6 +731,12 @@
         <div style="text-align: center; margin-top: 10px;">
             <button class="magical-button" onclick="showScreen('home')" style="background: linear-gradient(135deg, #9370db, #ba55d3);">
                 戻る
+            </button>
+        </div>
+        
+        <div style="text-align: center; margin-top: 10px;">
+            <button class="magical-button" onclick="showApiKeyModal()" style="background: linear-gradient(135deg, #ff1493, #ff69b4);">
+                🔑 API設定
             </button>
         </div>
     </div>
@@ -835,6 +883,40 @@
             <button class="magical-button" onclick="showScreen('home')" style="background: linear-gradient(135deg, #9370db, #ba55d3);">
                 戻る
             </button>
+        </div>
+    </div>
+    
+    <!-- API設定モーダル -->
+    <div id="apiKeyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeApiKeyModal()">&times;</span>
+            <h2 class="magical-title" style="font-size: 28px;">🔑 魔法の鍵を設定</h2>
+            
+            <div class="message-box">
+                <p style="color: #ffd700;">AI機能を使うにはGoogle Gemini APIキーが必要です</p>
+            </div>
+            
+            <div class="form-group">
+                <label>✨ Gemini APIキー</label>
+                <input type="password" class="magical-input" id="apiKeyInput" placeholder="AIzaSy...">
+                <p style="font-size: 12px; color: #ffb6c1; margin-top: 10px;">
+                    <a href="https://makersuite.google.com/" target="_blank" style="color: #ff6ec7;">
+                        ここから無料で取得できます →
+                    </a>
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="magical-button" onclick="saveApiKey()">
+                    🌙 魔法の鍵を保存
+                </button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 10px;">
+                <button class="magical-button" onclick="skipApiKey()" style="background: linear-gradient(135deg, #9370db, #ba55d3);">
+                    今はスキップ（AI機能なしで使う）
+                </button>
+            </div>
         </div>
     </div>
     
@@ -1116,7 +1198,7 @@
         
         // 新しいAIの問いかけを生成
         async function generateNewAIQuestion() {
-            if (GEMINI_API_KEY !== 'YOUR_GEMINI_API_KEY') {
+            if (GEMINI_API_KEY) {
                 const moonPhase = document.getElementById('currentMoonPhase').textContent;
                 const prompt = `あなたは幻の銀水晶のマジカルノートAIです。セーラームーンの世界観で、今の月相が${moonPhase}の時のマジカルな問いかけを1つ作ってください。50文字以内で。`;
                 
@@ -1224,7 +1306,7 @@
         }
         
         // Gemini API設定
-        const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY'; // ここにAPIキーを入れる
+        let GEMINI_API_KEY = localStorage.getItem('silverCrystal_apiKey') || '';
         const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
         
         // Gemini APIを使って星読みを生成
@@ -1260,8 +1342,8 @@
         async function generateDetailedHoroscope() {
             showMessage('星読みAIが分析中...');
             
-            if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY') {
-                showError('Gemini APIキーが設定されていません');
+            if (!GEMINI_API_KEY) {
+                showApiKeyModal();
                 return;
             }
             
@@ -1289,7 +1371,7 @@
         async function generateNewMessage() {
             showMessage('宇宙からのメッセージを受信中...');
             
-            if (GEMINI_API_KEY !== 'YOUR_GEMINI_API_KEY' && appState.userProfile) {
+            if (GEMINI_API_KEY && appState.userProfile) {
                 const zodiac = getZodiacSign(
                     new Date(appState.userProfile.birthDate).getMonth() + 1,
                     new Date(appState.userProfile.birthDate).getDate()
@@ -1417,8 +1499,53 @@
             }
         });
         
+        // APIキーモーダルを表示
+        function showApiKeyModal() {
+            document.getElementById('apiKeyModal').style.display = 'block';
+        }
+        
+        // APIキーモーダルを閉じる
+        function closeApiKeyModal() {
+            document.getElementById('apiKeyModal').style.display = 'none';
+        }
+        
+        // APIキーを保存
+        function saveApiKey() {
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            if (!apiKey) {
+                showError('APIキーを入力してください');
+                return;
+            }
+            
+            GEMINI_API_KEY = apiKey;
+            localStorage.setItem('silverCrystal_apiKey', apiKey);
+            
+            showSuccess('魔法の鍵が保存されました✨');
+            closeApiKeyModal();
+            
+            // AI機能を再試行
+            if (appState.currentScreen === 'horoscope') {
+                generateDetailedHoroscope();
+            } else if (appState.currentScreen === 'note') {
+                generateNewAIQuestion();
+            }
+        }
+        
+        // APIキーをスキップ
+        function skipApiKey() {
+            closeApiKeyModal();
+            showMessage('AI機能なしで使用します');
+        }
+        
         // アプリケーションを初期化
         init();
+        
+        // 初回起動時にAPIキーが未設定なら設定画面を表示
+        setTimeout(() => {
+            if (!GEMINI_API_KEY) {
+                showApiKeyModal();
+            }
+        }, 1000);
     </script>
 </body>
 </html>
