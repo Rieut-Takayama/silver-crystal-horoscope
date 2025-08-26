@@ -372,6 +372,40 @@
             border: 2px solid #ff6ec7;
         }
         
+        .calendar-day.new-moon {
+            background: rgba(138, 43, 226, 0.3);
+            color: #e6e6fa;
+        }
+        
+        .calendar-day.full-moon {
+            background: rgba(255, 215, 0, 0.3);
+            color: #fffacd;
+        }
+        
+        /* カレンダーモーダル */
+        .calendar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            overflow-y: auto;
+        }
+        
+        .calendar-modal-content {
+            background: linear-gradient(to bottom, #2a0055, #440088);
+            margin: 5% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 192, 203, 0.5);
+            box-shadow: 0 0 50px rgba(255, 192, 203, 0.5);
+        }
+        
         /* 流れ星アニメーション */
         .shooting-star {
             position: fixed;
@@ -750,30 +784,40 @@
             <p style="color: white; margin-top: 10px; font-size: 24px;" id="zodiacSign">♈ 牡羊座</p>
         </div>
         
-        <div class="card">
-            <h3 style="color: #ffd700;">今週の星の流れ</h3>
-            <p id="weeklyHoroscope" style="margin-top: 10px; line-height: 1.6;">
-                火星があなたの恋愛宮に入り、情熱的なエネルギーが高まります。
-                新しい出会いや既存の関係の深まりが期待できる時期です。
-            </p>
-        </div>
-        
-        <div class="card">
-            <h3 style="color: #ffd700;">重要な転換期</h3>
-            <p id="importantDates" style="margin-top: 10px; line-height: 1.6;">
-                📅 1月15日：金星と木星のトライン<br>
-                📅 1月22日：新月のエネルギー<br>
-                📅 2月3日：天王星順行開始
-            </p>
-        </div>
-        
-        <div style="text-align: center; margin-top: 30px;">
-            <button class="magical-button" onclick="generateDetailedHoroscope()">
-                🔮 詳細な星読みを見る
+        <!-- 期間切り替えタブ -->
+        <div style="display: flex; justify-content: center; gap: 10px; margin: 20px 0;">
+            <button class="magical-button" onclick="changePeriod('1year')" id="btn1year" style="padding: 10px 20px; font-size: 14px;">
+                1年
+            </button>
+            <button class="magical-button" onclick="changePeriod('5years')" id="btn5years" style="padding: 10px 20px; font-size: 14px; background: linear-gradient(135deg, #9370db, #ba55d3);">
+                5年
+            </button>
+            <button class="magical-button" onclick="changePeriod('10years')" id="btn10years" style="padding: 10px 20px; font-size: 14px; background: linear-gradient(135deg, #9370db, #ba55d3);">
+                10年
             </button>
         </div>
         
-        <div style="text-align: center; margin-top: 10px;">
+        <div class="card" id="horoscopeContent">
+            <h3 style="color: #ffd700;">今後1年の重要な転換期</h3>
+            <div id="transitionPeriods" style="margin-top: 20px;">
+                <div class="transition-item" style="background: rgba(255, 192, 203, 0.1); border-radius: 15px; padding: 15px; margin: 10px 0;">
+                    <p style="color: #ffd700; font-weight: bold;">📅 2月14日 - 愛と調和の時期</p>
+                    <p style="font-size: 14px; margin-top: 5px;">金星があなたの恋愛宮に入ります。新しい出会いや、既存の関係が深まるチャンス。自分の魅力を信じて積極的に。</p>
+                </div>
+                
+                <div class="transition-item" style="background: rgba(255, 192, 203, 0.1); border-radius: 15px; padding: 15px; margin: 10px 0;">
+                    <p style="color: #ffd700; font-weight: bold;">📅 5月20日 - 変革と成長の時期</p>
+                    <p style="font-size: 14px; margin-top: 5px;">天王星の影響で大きな変化が。キャリアや生活スタイルを見直す良いタイミング。変化を恐れず受け入れて。</p>
+                </div>
+                
+                <div class="transition-item" style="background: rgba(255, 192, 203, 0.1); border-radius: 15px; padding: 15px; margin: 10px 0;">
+                    <p style="color: #ffd700; font-weight: bold;">📅 9月10日 - 収穫と達成の時期</p>
+                    <p style="font-size: 14px; margin-top: 5px;">努力が実を結ぶ時。これまでの頑張りが評価され、新たなチャンスが訪れます。感謝の気持ちを忘れずに。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
             <button class="magical-button" onclick="showScreen('home')" style="background: linear-gradient(135deg, #9370db, #ba55d3);">
                 戻る
             </button>
@@ -785,7 +829,7 @@
         <h2 class="magical-title" style="font-size: 28px;">願いを紡ぐ</h2>
         
         <div class="message-box" style="background: rgba(255, 192, 203, 0.2);">
-            <p style="color: #ffd700; font-size: 16px;">✨ AIからの問いかけ ✨</p>
+            <p style="color: #ffd700; font-size: 16px;">✨ 星たちからの問いかけ ✨</p>
             <p style="color: white; margin-top: 10px; font-size: 18px;" id="aiQuestion">
                 「今の星の流れは〈変容〉のエネルギー。<br>
                 何を手放し、何を受け入れますか？」
@@ -798,14 +842,32 @@
         </div>
         
         <div class="form-group">
-            <label>🌟 象徴を選んでください</label>
+            <label>🌟 今の願いにぴったりのシンボルを選んでください</label>
             <div class="symbol-grid" id="symbolGrid">
-                <span class="symbol" data-symbol="moon">🌙</span>
-                <span class="symbol" data-symbol="star">⭐</span>
-                <span class="symbol" data-symbol="flower">🌸</span>
-                <span class="symbol" data-symbol="crystal">💎</span>
-                <span class="symbol" data-symbol="butterfly">🦋</span>
+                <div style="text-align: center;">
+                    <span class="symbol" data-symbol="moon" data-meaning="新しい始まり・直感">🌙</span>
+                    <p style="font-size: 11px; color: #ffb6c1; margin-top: 5px;">新しい始まり</p>
+                </div>
+                <div style="text-align: center;">
+                    <span class="symbol" data-symbol="star" data-meaning="希望・導き">⭐</span>
+                    <p style="font-size: 11px; color: #ffb6c1; margin-top: 5px;">希望と導き</p>
+                </div>
+                <div style="text-align: center;">
+                    <span class="symbol" data-symbol="flower" data-meaning="開花・成長">🌸</span>
+                    <p style="font-size: 11px; color: #ffb6c1; margin-top: 5px;">開花と成長</p>
+                </div>
+                <div style="text-align: center;">
+                    <span class="symbol" data-symbol="crystal" data-meaning="浄化・パワー">💎</span>
+                    <p style="font-size: 11px; color: #ffb6c1; margin-top: 5px;">浄化とパワー</p>
+                </div>
+                <div style="text-align: center;">
+                    <span class="symbol" data-symbol="butterfly" data-meaning="変容・自由">🦋</span>
+                    <p style="font-size: 11px; color: #ffb6c1; margin-top: 5px;">変容と自由</p>
+                </div>
             </div>
+            <p style="font-size: 13px; color: #ffb6c1; margin-top: 15px; text-align: center;" id="symbolMessage">
+                選んだシンボルがあなたの願いにエネルギーを与えます
+            </p>
         </div>
         
         <div style="text-align: center; margin-top: 30px;">
@@ -842,10 +904,40 @@
             <p style="color: white; margin-top: 10px;" id="moonPhaseInfo">🌒 上弦の月 - 行動を起こす時</p>
         </div>
         
+        <div style="text-align: center; margin-top: 10px;">
+            <p style="font-size: 13px; color: #ffb6c1;">
+                📅 タップして星の流れとメモを記録
+            </p>
+        </div>
+        
         <div style="text-align: center; margin-top: 30px;">
             <button class="magical-button" onclick="showScreen('home')" style="background: linear-gradient(135deg, #9370db, #ba55d3);">
                 戻る
             </button>
+        </div>
+    </div>
+    
+    <!-- カレンダー詳細モーダル -->
+    <div class="calendar-modal" id="calendarModal">
+        <div class="calendar-modal-content">
+            <span class="close-modal" onclick="closeCalendarModal()" style="float: right; font-size: 28px; color: #ffb6c1; cursor: pointer;">&times;</span>
+            <h3 class="magical-title" style="font-size: 24px;" id="modalDate">2025年1月1日</h3>
+            
+            <div class="message-box" style="margin-top: 20px;">
+                <p style="color: #ffd700;">この日の星の流れ</p>
+                <p style="color: white; margin-top: 10px;" id="dayFlow">新月のエネルギーが強まる日。新しいことを始めるのに最適なタイミングです。</p>
+            </div>
+            
+            <div class="form-group" style="margin-top: 20px;">
+                <label>🌙 今日の周波数メモ</label>
+                <textarea class="magical-textarea" placeholder="どんな気持ちで過ごす？願いは？" id="dayMemo" style="min-height: 100px;"></textarea>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="magical-button" onclick="saveDayMemo()">
+                    💎 記録する
+                </button>
+            </div>
         </div>
     </div>
     
@@ -928,6 +1020,8 @@
             notes: [],
             selectedSymbol: null,
             currentMonth: new Date(),
+            currentCalendarDate: null,
+            currentPeriod: '1year'
         };
         
         // ローカルストレージのキー
@@ -1157,6 +1251,17 @@
                     symbols.forEach(s => s.classList.remove('selected'));
                     this.classList.add('selected');
                     appState.selectedSymbol = this.dataset.symbol;
+                    
+                    // シンボルの意味を表示
+                    const meaning = this.dataset.meaning;
+                    const meanings = {
+                        moon: '月のエネルギーがあなたの直感を導き、新たな始まりをサポートします',
+                        star: '星の光があなたの道を照らし、希望と勇気を与えてくれます',
+                        flower: '花のように自然に開花する時。あなたの魅力が輝きます',
+                        crystal: '銀水晶の浄化パワーで、ネガティブなエネルギーをクリアに',
+                        butterfly: '蝶のように軽やかに変容し、新しい自分に生まれ変わります'
+                    };
+                    document.getElementById('symbolMessage').textContent = meanings[this.dataset.symbol];
                 });
             });
         }
@@ -1266,10 +1371,18 @@
                     dayCell.classList.add('today');
                 }
                 
-                // 特別な日（新月・満月など）
-                if (isSpecialMoonDay(year, month, date)) {
-                    dayCell.classList.add('special');
+                // 月相を計算
+                const moonPhase = getMoonPhaseForDate(year, month, date);
+                if (moonPhase === 'new-moon') {
+                    dayCell.classList.add('new-moon');
+                    dayCell.innerHTML = `${date}<span style="font-size: 10px;">🌑</span>`;
+                } else if (moonPhase === 'full-moon') {
+                    dayCell.classList.add('full-moon');
+                    dayCell.innerHTML = `${date}<span style="font-size: 10px;">🌕</span>`;
                 }
+                
+                // クリックイベント
+                dayCell.addEventListener('click', () => openCalendarModal(year, month, date));
                 
                 calendarGrid.appendChild(dayCell);
             }
@@ -1281,11 +1394,83 @@
             generateCalendar();
         }
         
-        // 特別な月の日かチェック（簡易版）
-        function isSpecialMoonDay(year, month, date) {
-            // 実際の天文学的計算の代わりに、簡易的なロジック
-            const day = new Date(year, month, date).getDate();
-            return day === 1 || day === 8 || day === 15 || day === 23;
+        // 月相を計算（簡易版）
+        function getMoonPhaseForDate(year, month, date) {
+            const targetDate = new Date(year, month, date);
+            const baseNewMoon = new Date(2000, 0, 6);
+            const lunarCycle = 29.53058867;
+            
+            const daysSinceBase = (targetDate - baseNewMoon) / (1000 * 60 * 60 * 24);
+            const currentCycle = daysSinceBase / lunarCycle;
+            const moonAge = (currentCycle - Math.floor(currentCycle)) * lunarCycle;
+            
+            if (moonAge < 1.5 || moonAge > 28) {
+                return 'new-moon';
+            } else if (moonAge > 13.5 && moonAge < 15.5) {
+                return 'full-moon';
+            }
+            return null;
+        }
+        
+        // カレンダーモーダルを開く
+        function openCalendarModal(year, month, date) {
+            const modalDate = new Date(year, month, date);
+            const dateStr = `${year}年${month + 1}月${date}日`;
+            
+            document.getElementById('modalDate').textContent = dateStr;
+            
+            // 月相に応じたメッセージ
+            const moonPhase = getMoonPhaseForDate(year, month, date);
+            let flow = '';
+            
+            if (moonPhase === 'new-moon') {
+                flow = '🌑 新月のエネルギー。新しい願いを宇宙に送る最高のタイミング。瞑想や内省に適した日。';
+            } else if (moonPhase === 'full-moon') {
+                flow = '🌕 満月のエネルギー。感謝と手放しの時。不要なものを浄化し、豊かさを受け取る準備を。';
+            } else {
+                const dayOfWeek = modalDate.getDay();
+                const flows = [
+                    '日曜日：太陽のエネルギー。自信と活力に満ちた一日。リーダーシップを発揮して。',
+                    '月曜日：月のエネルギー。感情と直感を大切に。家族や親しい人との時間を。',
+                    '火曜日：火星のエネルギー。行動力が高まる日。チャレンジ精神を持って。',
+                    '水曜日：水星のエネルギー。コミュニケーションに最適。学びや交流を深めて。',
+                    '木曜日：木星のエネルギー。幸運と拡大の日。新しいチャンスに心を開いて。',
+                    '金曜日：金星のエネルギー。愛と美の日。自分を大切に、美しいものに触れて。',
+                    '土曜日：土星のエネルギー。努力が実を結ぶ日。長期的な計画を立てるのに最適。'
+                ];
+                flow = flows[dayOfWeek];
+            }
+            
+            document.getElementById('dayFlow').textContent = flow;
+            
+            // 保存されたメモを読み込む
+            const memoKey = `memo_${year}_${month}_${date}`;
+            const savedMemo = localStorage.getItem(memoKey) || '';
+            document.getElementById('dayMemo').value = savedMemo;
+            
+            // 現在の日付を保存
+            appState.currentCalendarDate = { year, month, date };
+            
+            document.getElementById('calendarModal').style.display = 'block';
+        }
+        
+        // カレンダーモーダルを閉じる
+        function closeCalendarModal() {
+            document.getElementById('calendarModal').style.display = 'none';
+        }
+        
+        // 日付のメモを保存
+        function saveDayMemo() {
+            const memo = document.getElementById('dayMemo').value;
+            const { year, month, date } = appState.currentCalendarDate;
+            const memoKey = `memo_${year}_${month}_${date}`;
+            
+            localStorage.setItem(memoKey, memo);
+            showSuccess('周波数メモを記録しました✨');
+            
+            setTimeout(() => {
+                closeCalendarModal();
+            }, 1500);
         }
         
         // ホロスコープを更新
@@ -1338,33 +1523,70 @@
             }
         }
         
-        // 詳細なホロスコープを生成
-        async function generateDetailedHoroscope() {
-            showMessage('星読みAIが分析中...');
+        // 期間を切り替え
+        function changePeriod(period) {
+            appState.currentPeriod = period;
             
-            if (!GEMINI_API_KEY) {
-                showApiKeyModal();
-                return;
-            }
+            // ボタンのスタイルを更新
+            ['1year', '5years', '10years'].forEach(p => {
+                const btn = document.getElementById(`btn${p}`);
+                if (p === period) {
+                    btn.style.background = 'linear-gradient(135deg, #ff6ec7, #ff9472)';
+                } else {
+                    btn.style.background = 'linear-gradient(135deg, #9370db, #ba55d3)';
+                }
+            });
             
-            const zodiac = document.getElementById('zodiacSign').textContent;
-            const prompt = `あなたは幻の銀水晶の星読みAIです。セーラームーンの世界観で、${zodiac}の今週の詳細な運勢を教えてください。恋愛運、仕事運、金運、健康運、ラッキーアイテムを含めて、希望に満ちた美しい言葉で200文字程度で。`;
+            // コンテンツを更新
+            updateTransitionPeriods(period);
+        }
+        
+        // 転換期を更新
+        function updateTransitionPeriods(period) {
+            const titleMap = {
+                '1year': '今後1年の重要な転換期',
+                '5years': '今後5年の重要な転換期',
+                '10years': '今後10年の重要な転換期'
+            };
             
-            const result = await callGeminiAPI(prompt);
+            document.querySelector('#horoscopeContent h3').textContent = titleMap[period];
             
-            if (result) {
-                document.getElementById('weeklyHoroscope').textContent = result;
-                showSuccess('星読みが完了しました✨');
-            } else {
-                // オフラインでも使えるようにフォールバック
-                const fallbackMessages = [
-                    '銀水晶の力により、あなたの道は照らされています。愛と勇気を持って進んでください。',
-                    'プリンセス・セレニティがあなたを見守っています。困難も必ず乗り越えられるでしょう。',
-                    '月の光があなたの願いを叶えます。信じる心を忘れないでください。'
+            const periodsDiv = document.getElementById('transitionPeriods');
+            periodsDiv.innerHTML = '';
+            
+            // 期間に応じた転換期を生成
+            let transitions = [];
+            
+            if (period === '1year') {
+                transitions = [
+                    { date: '2月14日', title: '愛と調和の時期', desc: '金星があなたの恋愛宮に入ります。新しい出会いや、既存の関係が深まるチャンス。自分の魅力を信じて積極的に。' },
+                    { date: '5月20日', title: '変革と成長の時期', desc: '天王星の影響で大きな変化が。キャリアや生活スタイルを見直す良いタイミング。変化を恐れず受け入れて。' },
+                    { date: '9月10日', title: '収穫と達成の時期', desc: '努力が実を結ぶ時。これまでの頑張りが評価され、新たなチャンスが訪れます。感謝の気持ちを忘れずに。' }
                 ];
-                document.getElementById('weeklyHoroscope').textContent = fallbackMessages[Math.floor(Math.random() * fallbackMessages.length)];
-                showSuccess('星読みが完了しました✨');
+            } else if (period === '5years') {
+                transitions = [
+                    { date: '2025年秋', title: '人生の転機', desc: '重要な決断を迫られる時期。直感を信じて、心の声に従って。この選択があなたの未来を大きく変えます。' },
+                    { date: '2027年春', title: '開花の時期', desc: 'これまで育ててきたものが花開く時。才能が認められ、新しいステージへ。謙虚さを忘れずに。' },
+                    { date: '2029年冬', title: '新たな始まり', desc: '一つのサイクルが終わり、新しい冒険が始まります。過去に感謝し、未来に希望を持って進んでください。' }
+                ];
+            } else if (period === '10years') {
+                transitions = [
+                    { date: '2026-2028年', title: '基盤作りの時期', desc: '人生の土台を固める重要な時期。家族、キャリア、健康など、長期的な視点で計画を立てて。' },
+                    { date: '2030-2032年', title: '飛躍の時期', desc: 'あなたの真価が発揮される時。リーダーシップを取り、周りに良い影響を与える存在に。' },
+                    { date: '2034-2035年', title: '統合と成熟の時期', desc: '人生経験が智慧となり、他者を導く立場に。内なる平和と外的成功のバランスが取れる時。' }
+                ];
             }
+            
+            transitions.forEach(t => {
+                const item = document.createElement('div');
+                item.className = 'transition-item';
+                item.style.cssText = 'background: rgba(255, 192, 203, 0.1); border-radius: 15px; padding: 15px; margin: 10px 0;';
+                item.innerHTML = `
+                    <p style="color: #ffd700; font-weight: bold;">📅 ${t.date} - ${t.title}</p>
+                    <p style="font-size: 14px; margin-top: 5px;">${t.desc}</p>
+                `;
+                periodsDiv.appendChild(item);
+            });
         }
         
         // 新しいメッセージを生成
